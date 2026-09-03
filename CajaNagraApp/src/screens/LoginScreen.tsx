@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, Image, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 type RootStackParamList = {
@@ -28,6 +28,7 @@ export default function LoginScreen({ navigation }: Props) {
 
     return (
         <View style={styles.container}>
+            <Image source={require('../../assets/Logo_caja_negra.jpg')} style={styles.logo} />
             <Text style={styles.title}>Caja Negra</Text>
             <Text style={styles.label}>Correo electrónico</Text>
             <TextInput
@@ -100,5 +101,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    logo: {
+        width: 150,
+        height: 150,
+        resizeMode: 'contain',
+        alignSelf: 'center',
+        marginBottom: 20,
+        borderRadius: 30, // Half of the width/height to make it circular
     },
 });

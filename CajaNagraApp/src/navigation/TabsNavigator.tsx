@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import HomeScreen from '../screens/HomeScreen';
@@ -10,9 +11,9 @@ const Tab = createBottomTabNavigator();
 export const TabsNavigator = () => {
     return (
         <Tab.Navigator>
-            <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Add Item" component={AddItemScreen} />
-            <Tab.Screen name="Profile" component={ProfileScreen} />
+            <Tab.Screen name="Home" component={HomeScreen} options={{ tabBarIcon: () => (<Image source={require('../../assets/Home.png')} style={{ width: 36, height: 36 }} />) }} />
+            <Tab.Screen name="Add Item" component={AddItemScreen} options={{ tabBarIcon: () => (<Image source={require('../../assets/Add.png')} style={{ width: 36, height: 36 }} />) }} />
+            <Tab.Screen name="Profile" component={ProfileScreen} options={{ tabBarIcon: () => (<Image source={require('../../assets/Profile.png')} style={{ width: 36, height: 36 }} />) }} />
         </Tab.Navigator>
     );
 };
