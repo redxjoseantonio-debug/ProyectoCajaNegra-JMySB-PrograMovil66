@@ -1,13 +1,21 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TabsNavigator } from './TabsNavigator';
+import LoginScreen from '../screens/LoginScreen';
 
-const Stack = createBottomTabNavigator();
+export type RootStackParamList ={
+    Login: undefined,
+    Tabs: undefined,
+
+}
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const StackNavigator = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName='Login'>
             <Stack.Screen name="Tabs" component={TabsNavigator} />
+            <Stack.Screen name="Login" component={LoginScreen}/>
         </Stack.Navigator>
     );
 };1
