@@ -2,6 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import CustomButton from '../components/CustomButton';
+import CustomIput from '../components/CustomIput';
 
 type RootStackParamList = {
     Login: undefined;
@@ -31,33 +33,15 @@ export default function LoginScreen({ navigation }: Props) {
             <Image source={require('../../assets/Logo_caja_negra.jpg')} style={styles.logo} />
             <Text style={styles.title}>Caja Negra</Text>
             <Text style={styles.label}>Correo electrónico</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Correo@ejemplo.com"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-            />
-
-            {submitted && !emailValid && (
-                <Text style={styles.error}>Por favor, ingrese un correo electrónico válido.</Text>
-            )}
+            
+            <CustomIput placeholder="Correo@ejemplo.com" value={email} onChangeText={setEmail} type='email'/>
 
             <Text style={styles.label}>Contraseña</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Minimo 6 caracteres"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
-            {submitted && !passwordValid && (
-                <Text style={styles.error}>La contraseña debe tener al menos 6 caracteres.</Text>
-            )}
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Iniciar sesión</Text>
-            </TouchableOpacity>
+
+            <CustomIput placeholder="Minimo 6 caracteres" value={password} onChangeText={setPassword} type='password'/>
+            
+            <CustomButton title="Iniciar sesión" onPress={handleLogin} variant='primary'/>
+
         </View>
     );
 }
@@ -78,29 +62,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 6,
         fontWeight: '600',
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 8,
-        padding: 12,
-        marginBottom: 4,
-    },
-    error: {
-        color: 'red',
-        marginBottom: 24,
-    },
-    button: {
-        backgroundColor: '#007AFF',
-        padding: 14,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginTop: 20,
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
     },
     logo: {
         width: 150,

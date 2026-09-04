@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import CustomButton from '../components/CustomButton';
 
 export default function HomeScreen() {
     return (
@@ -9,9 +10,9 @@ export default function HomeScreen() {
             <View style={styles.card}>
             <Text style={styles.cardtitle}>🔎 ¿Buscas algo?</Text>
             <Text style={styles.cardtext}>Encuentra rapidamente un objeto y descubre en que caja, armario, gaveta o espacio lo almacenaste. </Text>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttontext}>Buscar objeto</Text>
-                </TouchableOpacity>
+                
+            <CustomButton title='Buscar objeto' onPress={()=>console.log(1)} variant='secondary'/>
+            
             </View>
             <View style={styles.infocard}>
                 <Text style={styles.infotitle}>📦 Organiza tus pertenencias</Text>
@@ -58,17 +59,6 @@ const styles = StyleSheet.create({
         color: '#555',
         lineHeight: 20,
         marginBottom: 20,
-    },
-    button: {
-        backgroundColor: '#222',
-        paddingVertical: 13,
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-    buttontext: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: 'bold',
     },
     infocard: {
         width: '100%',
