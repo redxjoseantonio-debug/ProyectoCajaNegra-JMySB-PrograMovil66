@@ -37,15 +37,16 @@ const [isSecureText, setIsSecureText] = useState(type === "password")
         const error = getError();
 
     return(
-        <View>
+        <View style={styles.wrapper}>
             <View style={[styles.inputContainer, error && isWritting && styles.inputError]}>
-            <MaterialIcons name={IconName as any} size={22} />
+            <MaterialIcons name={IconName as any} size={21} color="#555" />
 
         <TextInput
             style={styles.input}
             onChangeText={onChangeText}
             value={value}
             placeholder={placeholder}
+            placeholderTextColor="#999"
             keyboardType={keyboardType}
             secureTextEntry={isSecureText}
         />
@@ -53,7 +54,7 @@ const [isSecureText, setIsSecureText] = useState(type === "password")
         onPress={() => {
             setIsSecureText(!isSecureText);
         }}>
-        <Ionicons name="eye" size={22} />
+        <Ionicons name="eye" size={22} color="#666" />
         </TouchableOpacity>}
         </View>
         {error && isWritting && (<Text style={styles.inputError}>{error}</Text>)}
@@ -62,25 +63,35 @@ const [isSecureText, setIsSecureText] = useState(type === "password")
 }
 
 const styles = StyleSheet.create({
+    wrapper:{
+        width: '100%',
+        marginBottom: 14,
+    },
         inputContainer:{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: "space-between",
             borderRadius: 8,
-            borderColor: "#ccc",
+            borderColor: "#D9DDE2",
             borderWidth: 1,
             paddingLeft: 20,
             paddingRight: 20,
+            height:52,
             marginBottom: 4,
-
+            backgroundColor: "#F8F9FA",
+            paddingHorizontal: 15,
         },
         inputError:{
             color: 'red',
-            borderColor: 'red',
+            borderColor: '#E53935',
+            backgroundColor: '#FFF8F8',
             marginTop: 5,
             marginLeft: 5,
         },
         input:{
-            width: '80%',
-        }
+            flex: 1,
+            fontSize: 16,
+            color: '#333',
+            height: "100%",
+        },
     })

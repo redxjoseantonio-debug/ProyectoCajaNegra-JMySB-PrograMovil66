@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import CustomButton from '../components/CustomButton';
 
 export default function HomeScreen() {
@@ -30,55 +30,66 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: 24,
+        backgroundColor: '#F5F6F8',
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
+        fontSize: 27,
+        fontWeight: '700',
+        color: '#222',
         marginBottom: 10,
-    },
-    subtitle: {
-        fontSize: 16,
-        marginBottom: 30,
-        color: '#555',
         textAlign: 'center',
     },
+    subtitle: {
+        fontSize: 15,
+        marginBottom: 28,
+        color: '#666',
+        textAlign: 'center',
+        lineHeight: 21,
+    },
     card: {
-        backgroundColor: '#f9f9f9',
+        backgroundColor: '#FFFFFF',
         width: '100%',
         padding: 22,
-        elevation: 4,
+        elevation: 3,
         borderRadius: 18,
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 3 },
     },
     cardtitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 12,
+        fontSize: 19,
+        fontWeight: '700',
+        marginBottom: 10,
+        color: '#222',
     },
     cardtext: {
         fontSize: 14,
-        color: '#555',
-        lineHeight: 20,
-        marginBottom: 20,
+        color: '#666',
+        lineHeight: 21,
+        marginBottom: 4,
     },
     infocard: {
         width: '100%',
-        backgroundColor: '#EAEAEA',
-        borderRadius: 15,
+        backgroundColor: '#EDEEF0',
+        borderRadius: 16,
         padding: 18,
+        marginTop: 16,
     },
     infotitle: {
         fontSize: 17,
-        fontWeight: 'bold',
-        marginBottom: 8,
+        fontWeight: '700',
+        marginBottom: 6,
+        color: '#333'
     },
     infotext: {
         fontSize: 14,
-        color: '#555',
+        color: '#666',
         lineHeight: 20,
     },
     pie: {
         marginTop: 25,
-        fontSize: 14,
+        fontSize: 13,
         color: '#888',
         fontWeight: '600',
     },

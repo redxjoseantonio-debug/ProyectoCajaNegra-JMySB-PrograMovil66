@@ -28,10 +28,13 @@ const getStyles = (variant: "primary"| "secondary" | "tertiary") =>
             padding: 14,
             marginTop: 20,
             alignItems: "center",
+            borderWidth: variant === "tertiary" ? 1 : 0,
+            borderColor: "#D9DDE2",
+            elevation: variant === "tertiary" ? 0 : 2,
         },
         buttonTitle: {
-            color: variant === "tertiary" ? 'black' : 'white',
+            color: variant === "tertiary" ? '#222' : '#FFFFFF',
             fontSize: 16,
-            fontWeight: "bold"
+            fontWeight: "600",
         }
     })
