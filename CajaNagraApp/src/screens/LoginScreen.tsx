@@ -4,6 +4,7 @@ import { View, Text, TextInput, Button, Image, StyleSheet, Touchable, TouchableO
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '../components/CustomButton';
 import CustomIput from '../components/CustomIput';
+import { useTheme } from '../contexts/ThemeContext';
 
 type RootStackParamList = {
     Login: undefined;
@@ -17,6 +18,8 @@ export default function LoginScreen({ navigation }: Props) {
     const [password, setPassword] = useState('');
     const [submitted, setSubmitted] = useState(false);
 
+    const { theme } = useTheme();
+
     const emailValid = email.includes('@') && email.includes('.');
     const passwordValid = password.length >= 6;
 
@@ -29,14 +32,14 @@ export default function LoginScreen({ navigation }: Props) {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: theme.background}]}>
             <Image source={require('../../assets/Logo_caja_negra.jpg')} style={styles.logo} />
-            <Text style={styles.title}>Caja Negra</Text>
-            <Text style={styles.subtitle}>Organiza tus objetos de forma sencilla</Text>
+            <Text style={[styles.title,{color: theme.text}]}>Caja Negra</Text>
+            <Text style={[styles.subtitle,{color: theme.text}]}>Organiza tus objetos de forma sencilla</Text>
             <View style={styles.form}>
-            <Text style={styles.label}>Correo electrónico</Text>
+            <Text style={[styles.label,{color: theme.text}]}>Correo electrónico</Text>
             <CustomIput placeholder="Correo@ejemplo.com" value={email} onChangeText={setEmail} type='email'/>
-            <Text style={styles.label}>Contraseña</Text>
+            <Text style={[styles.label,{color: theme.text}]}>Contraseña</Text>
             <CustomIput placeholder="Minimo 6 caracteres" value={password} onChangeText={setPassword} type='password'/>
             <CustomButton title="Iniciar sesión" onPress={handleLogin} variant='primary'/>
             </View>

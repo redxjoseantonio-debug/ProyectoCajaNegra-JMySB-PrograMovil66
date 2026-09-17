@@ -1,5 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { useTheme } from "../contexts/ThemeContext";
 
 type CustomButtonProps = {
     title: string;
@@ -8,10 +9,13 @@ type CustomButtonProps = {
 };
 
 export default function CustomButton({title, onPress, variant="primary"}: CustomButtonProps){
-    const styles = getStyles(variant); 
+    
+    const { theme, isDark } = useTheme();
+    
+    const styles = getStyles(variant, theme, isDark); 
 
     return(
-        <TouchableOpacity style={styles.button} onPress={onPress} >
+        <TouchableOpacity style={styles.button} onPress={onPress} activeOpacity={0.75} >
             <Text style={styles.buttonTitle}>
                 {title}
             </Text>
@@ -19,22 +23,24 @@ export default function CustomButton({title, onPress, variant="primary"}: Custom
     );
 };
 
-const getStyles = (variant: "primary"| "secondary" | "tertiary") =>
+const getStyles = (variant: "primary"| "secondary" | "tertiary", theme: any, isDark: boolean) =>
     StyleSheet.create({
         button:{
             backgroundColor: variant === "primary" ? '#007AFF' : 
-                                    variant === "secondary" ? '#222' : '#fff',
-            borderRadius: variant==="primary"? 8 : variant==="secondary" ? 10 : 0,
-            padding: 14,
+            variant === "secondary" ? isDark ? '#333333' : '#222222' : theme.card,
+            borderRadius: variant==="primary"? 10 : variant==="secondary" ? 12 : 10,
+            paddingVertical: 14,
+            paddingHorizontal: 20,
             marginTop: 20,
             alignItems: "center",
+            justifyContent: "center",
             borderWidth: variant === "tertiary" ? 1 : 0,
-            borderColor: "#D9DDE2",
+            borderColor: isDark ? "#444444" : "#D9DDE2",
             elevation: variant === "tertiary" ? 0 : 2,
         },
         buttonTitle: {
-            color: variant === "tertiary" ? '#222' : '#FFFFFF',
+            color: variant === "tertiary" ? theme.text : '#FFFFFF',
             fontSize: 16,
             fontWeight: "600",
         }
-    })
+    });

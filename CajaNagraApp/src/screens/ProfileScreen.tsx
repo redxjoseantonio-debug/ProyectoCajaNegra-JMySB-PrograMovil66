@@ -1,18 +1,37 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import CustomButton from '../components/CustomButton';
+import { useTheme } from '../contexts/ThemeContext';
+import { Switch } from 'react-native-gesture-handler';
+import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
 
 export default function ProfileScreen() {
+
+    const {theme, isDark, toggleTheme } = useTheme();
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Mi Perfil</Text>
-            <Text style={styles.subtitle}>Administra la informacion de tu cuenta</Text>
-            <View style={styles.card}>
-                <View style={styles.profileCircle}>
+        <View style={[styles.container, {backgroundColor: theme.background}]}>
+            <Text style={[styles.title,{ color: theme.text}]}>Mi Perfil</Text>
+            <Text style={[styles.subtitle,{ color: theme.text}]}>Administra la informacion de tu cuenta</Text>
+            <View style={[styles.card,{ backgroundColor: theme.card}]}>
+            <View style={styles.profileCircle}>
                 <Text style={styles.profileIcon}>👤</Text>
                 </View>
-                <Text style={styles.profileName}>Nombre de Usuario</Text>
-                <Text style={styles.profileDescription}>Organica tus objetos y manten el control de donde los guardaste.</Text>  
+                <View style={styles.profileInfo}>
+                <Text style={[styles.Name,{ color: theme.text}]}>Nombre de Usuario</Text>
+                <Text style={[styles.Email,{ color: theme.text}]}>Mi cuenta de Caja Negra</Text>  
+                </View>
+            </View>
+            <View style={[styles.themeCard, { backgroundColor: theme.card}]}>
+                <Text style={[styles.sectionTitle, { color: theme.text}]}>Preferencias</Text>
+                <View style={styles.option}>
+                    <View style={styles.optionInfo}>
+                        <Text style={styles.optionIcon}>{isDark? '🌙' : '☀️'}</Text>
+                    </View>
+                    <Text style={[styles.themeTitle, {color: theme.text}]}> Modo Oscuro </Text>
+                    <Text style={[styles.themeDescription,{color: theme.text}]}></Text>
+                    <Switch value={isDark} onValueChange={toggleTheme}/>
+                </View>
             </View>
             <View style={styles.buttons}>
             <CustomButton title='Editar perfil' onPress={()=>console.log(1)} variant='secondary'/>
@@ -24,25 +43,23 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5F6F8',
         paddingHorizontal: 24,
-        paddingTop: 50,
+        paddingTop: 55,
     },
     title: {
-        fontSize: 27,
+        fontSize: 30,
         fontWeight: '700',
-        marginBottom: 8,
-        color: '#222',
+        marginBottom: 7,
     },
     subtitle: {
         fontSize: 15,
-        marginBottom: 25,
-        color: '#666',
+        opacity: 0.65,
+        marginBottom: 28,
     },
     card: {
-        backgroundColor: '#FFFFFF',
         width: '100%',
-        padding: 25,
+        padding: 20,
+        flexDirection: 'row',
         alignItems: 'center',
         elevation: 3,
         borderRadius: 18,
@@ -50,29 +67,72 @@ const styles = StyleSheet.create({
         shadowRadius: 8,
         shadowOffset: { width: 0, height: 3 },
     },
+    themeCard: {
+        width: '100%',
+        borderRadius: 18,
+        padding: 20,
+        marginTop: 18,
+        elevation: 3,
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+        shadowOffset: {width: 0, height: 3},
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: '700',
+        marginBottom: 18,
+    },
+    option: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+    },
+    optionInfo: {
+        fontSize: 24,
+        marginRight: 14,
+    },
+    optionIcon: {
+        fontSize: 16,
+        fontWeight: '600',
+        marginBottom: 3,
+    },
+    themeTitle: {
+        fontSize: 18,
+        fontWeight: '700',
+        marginBottom: 18,
+    },
+    themeDescription: {
+        fontSize: 13,
+    },
     profileCircle: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        backgroundColor: '#EDEEF0',
+        width: 62,
+        height: 62,
+        borderRadius: 31,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 15,
+        marginRight: 16,
+        backgroundColor: '#E9EAEC',
     },
     profileIcon: {
-        fontSize: 36,
+        fontSize: 28,
     },
-    profileName: {
+    profileInfo: {
+        flex: 1,
+    },
+    Name: {
         fontSize: 19,
         fontWeight: '700',
-        color: '#222',
-        marginBottom: 8,
+        marginBottom: 5,
+    },
+    Email: {
+        fontSize: 13,
+        opacity: 0.6,
     },
     profileDescription:{
-        fontSize: 14,
-        color: '#666',
+        fontSize: 13,
         textAlign: 'center',
         lineHeight: 21,
+        opacity: 0.6,
     },
     buttons:{
         width:'100%',
