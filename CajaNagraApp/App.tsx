@@ -5,17 +5,20 @@ import { ThemeProvider } from './src/contexts/ThemeContext';
 import { navigationRef } from './src/navigation/NavigatorService';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { LanguageProviver } from './src/contexts/LanguageContext';
+import { AuthProvider } from './src/contexts/AuthContext';
 
 export default function App() {
     return (
         <GestureHandlerRootView style={{flex: 1 }}>
-        <ThemeProvider>
-        <LanguageProviver>
-        <NavigationContainer ref={navigationRef}>
-            <StackNavigator />
-        </NavigationContainer>
-        </LanguageProviver>
-        </ThemeProvider>
+            <AuthProvider>
+                <ThemeProvider>
+                    <LanguageProviver>
+                        <NavigationContainer ref={navigationRef}>
+                            <StackNavigator />
+                        </NavigationContainer>
+                    </LanguageProviver>
+                </ThemeProvider>
+            </AuthProvider>
         </GestureHandlerRootView>
     );
 }

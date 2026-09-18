@@ -5,6 +5,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '../components/CustomButton';
 import CustomIput from '../components/CustomIput';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 
 type RootStackParamList = {
     Login: undefined;
@@ -19,16 +20,19 @@ export default function LoginScreen({ navigation }: Props) {
     const [submitted, setSubmitted] = useState(false);
 
     const { theme } = useTheme();
+    const { login } = useAuth();
 
     const emailValid = email.includes('@') && email.includes('.');
     const passwordValid = password.length >= 6;
 
     const handleLogin = () => {
-        setSubmitted(true);
+      const allowed = login(email);
 
-        if (emailValid && passwordValid) {
-            navigation.navigate('Tabs');
-        }
+      if (allowed){
+      navigation.navigate('Tabs');
+      }else{
+        console.log("usuario sin acceso");
+      }
     };
 
     return (
@@ -52,18 +56,15 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 28,
-        backgroundColor: '#F5F6F8',
     },
     title: {
         fontSize: 32,
         fontWeight: '700',
-        color: '#222',
         marginBottom: 6,
         textAlign: 'center',
     },
     subtitle: {
         fontSize: 14,
-        color: '#777',
         textAlign: 'center',
         marginBottom: 30,
     },
@@ -74,7 +75,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginBottom: 7,
         fontWeight: '600',
-        color: '#333',
     },
     logo: {
         width: 130,

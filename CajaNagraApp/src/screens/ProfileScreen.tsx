@@ -2,23 +2,24 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { useTheme } from '../contexts/ThemeContext';
-import { Switch } from 'react-native-gesture-handler';
-import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
+import { Switch } from 'react-native';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { TabsParamList } from '../navigation/TabsNavigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/StackNavigator';
 import { navigationRef } from '../navigation/NavigatorService';
+import { useAuth } from '../contexts/AuthContext';
 
 type NestedProps = CompositeScreenProps<
-    BottomTabScreenProps<TabsParamList, "Home">,
+    BottomTabScreenProps<TabsParamList, "Profile">,
     NativeStackScreenProps<RootStackParamList>
 >;
 
 export default function ProfileScreen({navigation, route}: NestedProps) {
 
     const {theme, isDark, toggleTheme } = useTheme();
+    const { user } = useAuth();
 
     const handlelogout = ()=>{
         if (navigationRef.isReady()){
@@ -41,18 +42,27 @@ export default function ProfileScreen({navigation, route}: NestedProps) {
                 </View>
                 <View style={styles.profileInfo}>
                 <Text style={[styles.Name,{ color: theme.text}]}>Nombre de Usuario</Text>
-                <Text style={[styles.Email,{ color: theme.text}]}>Mi cuenta de Caja Negra</Text>  
+                <Text style={[styles.Email,{ color: theme.text}]}>{user? user?.email : 'No hay usuario'}</Text>  
                 </View>
             </View>
+
             <View style={[styles.themeCard, { backgroundColor: theme.card}]}>
                 <Text style={[styles.sectionTitle, { color: theme.text}]}>Preferencias</Text>
+                
+                <View style={[styles.division,{backgroundColor: isDark ? '#333333' : '#E1E1E1'}]}/>
                 <View style={styles.option}>
                     <View style={styles.optionInfo}>
+                        <View style={[styles.optionIconContainer,{backgroundColor: isDark ? '#333333' : '#F0F1F3'}]}>
                         <Text style={styles.optionIcon}>{isDark? '🌙' : '☀️'}</Text>
                     </View>
+                    <View style={styles.themeTextContainer}>
                     <Text style={[styles.themeTitle, {color: theme.text}]}> Modo Oscuro </Text>
-                    <Text style={[styles.themeDescription,{color: theme.text}]}></Text>
-                    <Switch value={isDark} onValueChange={toggleTheme}/>
+                    <Text style={[styles.themeDescription,{color: theme.text}]}>{isDark ? 'Tema oscuro activado' : 'Tema claro activado'}</Text>
+                    </View>
+                    </View>
+                    <Switch value={isDark} onValueChange={toggleTheme}
+                    trackColor={{false: '#D1D5DB', true: '#555555',}}
+                    thumbColor={isDark ? '#FFFFFF' : '#FFFFFF'}/>
                 </View>
             </View>
             <View style={styles.buttons}>
@@ -104,6 +114,9 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         marginBottom: 18,
     },
+    themeTextContainer:{
+        flex: 1,
+    },
     option: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -117,6 +130,21 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
         marginBottom: 3,
+    },
+    division: {
+        width: '100%',
+        height: 1,
+        marginTop: 14,
+        marginBottom: 16,
+    },
+
+    optionIconContainer:{
+        width: 46,
+        height: 46,
+        borderRadius: 14,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 13,
     },
     themeTitle: {
         fontSize: 18,
