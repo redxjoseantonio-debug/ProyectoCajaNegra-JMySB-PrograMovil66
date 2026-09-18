@@ -4,10 +4,32 @@ import CustomButton from '../components/CustomButton';
 import { useTheme } from '../contexts/ThemeContext';
 import { Switch } from 'react-native-gesture-handler';
 import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { TabsParamList } from '../navigation/TabsNavigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/StackNavigator';
+import { navigationRef } from '../navigation/NavigatorService';
 
-export default function ProfileScreen() {
+type NestedProps = CompositeScreenProps<
+    BottomTabScreenProps<TabsParamList, "Home">,
+    NativeStackScreenProps<RootStackParamList>
+>;
+
+export default function ProfileScreen({navigation, route}: NestedProps) {
 
     const {theme, isDark, toggleTheme } = useTheme();
+
+    const handlelogout = ()=>{
+        if (navigationRef.isReady()){
+            navigationRef.reset({
+                routes: [
+                    {name: 'Login'}
+                ],
+                index: 0,
+            })
+        }
+    };
 
     return (
         <View style={[styles.container, {backgroundColor: theme.background}]}>
@@ -34,7 +56,7 @@ export default function ProfileScreen() {
                 </View>
             </View>
             <View style={styles.buttons}>
-            <CustomButton title='Editar perfil' onPress={()=>console.log(1)} variant='secondary'/>
+            <CustomButton title='Cerrar Sesion' onPress={handlelogout} variant='secondary'/>
         </View>
         </View>
     );
