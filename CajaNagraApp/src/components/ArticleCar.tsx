@@ -1,18 +1,21 @@
 import { View, Text, Image, StyleSheet } from "react-native";
 import { Article } from "../contexts/ArticleContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 type LugarCardProps = {
     articlet: Article;
 }
 
 export const ArticleCard = ({ articlet }: LugarCardProps) => {
-    return (
-        <View style={styles.card}>
+        const {theme} = useTheme();
+
+    return (        
+        <View style={[styles.card, {backgroundColor: theme.card}]}>
             {/* Columna izquierda: textos */}
-            <View style={styles.infoContainer}>
-                <Text style={styles.nombre}>{articlet.nombre}</Text>
-                <Text style={styles.ubicacion}>{articlet.ubicacion}</Text>
-                <Text style={styles.descripcion} numberOfLines={3}>
+            <View style={[styles.infoContainer, {backgroundColor: theme.card}]}>
+                <Text style={[styles.nombre,{color: theme.text}]}>{articlet.nombre}</Text>
+                <Text style={[styles.ubicacion,{color: theme.text}]}>{articlet.ubicacion}</Text>
+                <Text style={[styles.descripcion,{color: theme.text}]} numberOfLines={3}>
                     {articlet.descripcion}
                 </Text>
             </View>
@@ -29,43 +32,43 @@ export const ArticleCard = ({ articlet }: LugarCardProps) => {
 
 const styles = StyleSheet.create({
     card: {
-        width: '100%',
+        width: '92%',
         flexDirection: "row",
+        textAlign: "center",
         backgroundColor: "#fff",
-        borderRadius: 12,
-        padding: 12,
-        marginVertical: 6,
+        borderRadius: 16,
+        padding: 14,
+        marginVertical: 9,
         marginHorizontal: 12,
-        elevation: 3,
+        elevation: 4,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
+        shadowOpacity: 0.12,
         shadowRadius: 4,
     },
     infoContainer: {
-        width: '70%',
-        flexDirection: "column",
+        flex: 1,
         justifyContent: "center",
-        paddingRight: 10,
+        paddingRight: 12,
     },
     nombre: {
-        fontSize: 16,
+        fontSize: 17,
         fontWeight: "bold",
-        color: "#222",
+        marginBottom: 5,
     },
     ubicacion: {
         fontSize: 13,
-        color: "#666",
-        marginTop: 2,
+        opacity: 0.75,
+        marginBottom: 7,
     },
     descripcion: {
         fontSize: 13,
-        color: "#444",
-        marginTop: 6,
+        lineHeight: 18,
+        opacity: 0.85,
     },
     image: {
-        width: 80,
-        height: 80,
-        borderRadius: 10,
+        width: 90,
+        height: 90,
+        borderRadius: 12,
     },
 });
