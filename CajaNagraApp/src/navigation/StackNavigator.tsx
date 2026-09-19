@@ -3,11 +3,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabsNavigator from './TabsNavigator';
 import LoginScreen from '../screens/LoginScreen';
 import { useTheme } from '../contexts/ThemeContext';
+import RegisterScreen from '../screens/RegisterScreen';
 
 export type RootStackParamList ={
     Login: undefined;
     Tabs: undefined;
-
+    Register: undefined;
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -27,6 +28,7 @@ export const StackNavigator = () => {
         headerShadowVisible: false,}}>
             <Stack.Screen name="Tabs" component={TabsNavigator}/>
             <Stack.Screen name="Login" component={LoginScreen}/>
+            <Stack.Screen name='Register' component={RegisterScreen}/>
         </Stack.Navigator>
     );
 };

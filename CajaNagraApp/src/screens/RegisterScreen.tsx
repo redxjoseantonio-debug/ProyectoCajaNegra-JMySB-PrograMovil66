@@ -14,9 +14,9 @@ type RootStackParamList = {
     Register: undefined;
 };
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'Register' >;
 
-export default function LoginScreen({ navigation }: Props) {
+export default function RegisterScreen({ navigation }: Props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [submitted, setSubmitted] = useState(false);
@@ -27,10 +27,6 @@ export default function LoginScreen({ navigation }: Props) {
 
     const emailValid = email.includes('@') && email.includes('.');
     const passwordValid = password.length >= 6;
-
-    const handleRegister = () => {
-        navigation.navigate('Register');
-    }
 
     const handleLogin = () => {
       const allowed = login(email);
@@ -48,14 +44,13 @@ export default function LoginScreen({ navigation }: Props) {
         <View style={[styles.container, {backgroundColor: theme.background}]}>
             <Image source={require('../../assets/Logo_caja_negra.jpg')} style={styles.logo} />
             <Text style={[styles.title,{color: theme.text}]}>{messag('nameApp')}</Text>
-            <Text style={[styles.subtitle,{color: theme.text}]}>{messag('welcomLogin')}</Text>
+            <Text style={[styles.subtitle,{color: theme.text}]}>Registrate</Text>
             <View style={styles.form}>
             <Text style={[styles.label,{color: theme.text}]}>{messag('nameEmail')}</Text>
             <CustomIput placeholder={messag('typeEmail')} value={email} onChangeText={setEmail} type='email'/>
             <Text style={[styles.label,{color: theme.text}]}>{messag('namePass')}</Text>
             <CustomIput placeholder={messag('typePassword')} value={password} onChangeText={setPassword} type='password'/>
             <CustomButton title={messag('signIn')} onPress={handleLogin} variant='primary'/>
-            <CustomButton title='Ir a register' onPress={handleRegister} variant='primary' />
             </View>
         </View>
     );
