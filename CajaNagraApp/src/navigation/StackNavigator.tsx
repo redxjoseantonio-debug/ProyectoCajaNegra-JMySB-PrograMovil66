@@ -25,7 +25,7 @@ export const StackNavigator = () => {
             fontWeight: '700',
         },
         headerShadowVisible: false,}}>
-            <Stack.Screen name="Tabs" component={TabsNavigator} />
+            <Stack.Screen name="Tabs" component={TabsNavigator}/>
             <Stack.Screen name="Login" component={LoginScreen}/>
         </Stack.Navigator>
     );
