@@ -32,16 +32,13 @@ export default function LoginScreen({ navigation }: Props) {
         navigation.navigate('Register');
     }
 
-    const handleLogin = () => {
-      const allowed = login(email);
-      
-      
-
-      if (allowed){
-      navigation.navigate('Tabs');
-      }else{
-        console.log("usuario sin acceso");
-      }
+    const handleLogin = async () => {
+        try {
+            await login (email, password);
+            navigation.navigate("Tabs");
+        } catch (error:any) {
+            console.log("usuario no tiene acceso")
+        }
     };
 
     return (

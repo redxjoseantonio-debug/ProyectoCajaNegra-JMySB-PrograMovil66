@@ -22,10 +22,7 @@ export const AuthProvider =({children}:{children: React.ReactNode})=>{
     const [user, setUser] = useState<User>(null);
 
     const register = async(email: string, pwd: string)=>{
-        const { data, error } = await supabase.auth.signUp({
-            email: 'example@email.com',
-            password: 'example-password',
-        })
+        const { data, error } = await supabase.auth.signUp({email, password: pwd})
         if (error) throw error;
     }
     

@@ -22,22 +22,19 @@ export default function RegisterScreen({ navigation }: Props) {
     const [submitted, setSubmitted] = useState(false);
 
     const { theme } = useTheme();
-    const { login } = useAuth();
+    const { register } = useAuth();
     const { messag } = useLenguage();
 
     const emailValid = email.includes('@') && email.includes('.');
     const passwordValid = password.length >= 6;
 
-    const handleLogin = () => {
-      const allowed = login(email);
-      
-      
-
-      if (allowed){
-      navigation.navigate('Tabs');
-      }else{
-        console.log("usuario sin acceso");
-      }
+    const handleRegistrer = async () => {
+        try {
+           await register(email, password);
+           navigation.navigate("Login");
+        } catch (error:any) {
+            console.log("error al registrarse:",error.message);
+        }
     };
 
     return (
@@ -50,7 +47,7 @@ export default function RegisterScreen({ navigation }: Props) {
             <CustomIput placeholder={messag('typeEmail')} value={email} onChangeText={setEmail} type='email'/>
             <Text style={[styles.label,{color: theme.text}]}>{messag('namePass')}</Text>
             <CustomIput placeholder={messag('typePassword')} value={password} onChangeText={setPassword} type='password'/>
-            <CustomButton title={messag('signIn')} onPress={handleLogin} variant='primary'/>
+            <CustomButton title={messag('signIn')} onPress={handleRegistrer} variant='primary'/>
             </View>
         </View>
     );
