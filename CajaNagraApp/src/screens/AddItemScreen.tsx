@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import CustomIput from '../components/CustomIput';
 import { useTheme } from '../contexts/ThemeContext';
+import { useArticlees } from '../contexts/ArticleContext';
+import CustomButton from '../components/CustomButton';
 
 export default function AddItemScreen() {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
+    const [urlImage, setUrlImage] = useState('');
 
     const nameValid = name.trim().length > 0;
     const locationValid = location.trim().length > 0;
@@ -14,6 +17,21 @@ export default function AddItemScreen() {
     const [submitted, setSubmitted] = useState(false);
 
     const {theme} = useTheme();
+
+    const {addarticle} = useArticlees();
+
+    const handleAdd = () => {
+        addarticle({
+            nombre: name,
+            ubicacion: location,
+            descripcion: description,
+            urlImage: ''
+        });
+        setName('');
+        setDescription('');
+        setLocation('');
+    };
+
 
     return (
         <View style={[styles.container,{ backgroundColor: theme.background}]}>
@@ -23,6 +41,19 @@ export default function AddItemScreen() {
             <View style={[styles.card, { backgroundColor: theme.card}]}>
                 <Text style={[styles.cardtitle, { color: theme.text}]}>📦 Agrega un objeto</Text>
                 <Text style={[styles.cardtext,{color: theme.text}]}>Aqui podras agregar la informacion de tus pertenencias y mantenerlas organizadas.</Text>
+            </View>
+
+            <View style={[styles.card, { backgroundColor: theme.card}]}>
+                <CustomIput placeholder='Ingresa el nombre' value={name} onChangeText={setName}/>
+
+                <CustomIput placeholder='Ingresa el lugar' value={location} onChangeText={setLocation}/>
+
+                <CustomIput placeholder='Ingresa Descripcion' value={description} onChangeText={setDescription}/>
+
+                
+
+                <CustomButton title='Agregar articulo' onPress={handleAdd} /> 
+
             </View>
         </View>
     );

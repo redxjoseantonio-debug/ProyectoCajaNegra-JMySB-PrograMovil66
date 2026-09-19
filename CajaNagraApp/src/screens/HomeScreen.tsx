@@ -8,6 +8,8 @@ import { TabsParamList } from '../navigation/TabsNavigator';
 import { RootStackParamList } from '../navigation/StackNavigator';
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTheme } from '../contexts/ThemeContext';
+import { ListaArticle } from '../components/ListaArticle';
+import { ArticleCard } from '../components/ArticleCar';
 
 type NestedFeedProps = CompositeScreenProps<
 BottomTabScreenProps<TabsParamList, 'Home'>,
@@ -19,24 +21,27 @@ export default function HomeScreen({navigation, route}: NestedFeedProps) {
     const { theme } = useTheme();
 
     return (
-        <View style={[styles.container, {backgroundColor: theme.background}]}>
-            <Text style={[styles.title,{color: theme.text}]}>Bienvenido a Caja Nagra</Text>
-            <Text style={[styles.subtitle,{color: theme.text}]}>Organiza tus objetos y encuentra donde los guardaste.</Text>
-            <View style={[styles.card,{backgroundColor: theme.card}]}>
-            <Text style={[styles.cardtitle,{color: theme.text}]}>🔎 ¿Buscas algo?</Text>
-            <Text style={[styles.cardtext,{color: theme.text}]}>Encuentra rapidamente un objeto y descubre en que caja, armario, gaveta o espacio lo almacenaste. </Text>
-                
-            <CustomButton title='Buscar objeto' onPress={()=>console.log(1)} variant='secondary'/>
-            
-            </View>
-            <View style={[styles.infocard,{backgroundColor: theme.card}]}>
-                <Text style={[styles.infotitle,{color: theme.text}]}>📦 Organiza tus pertenencias</Text>
-            </View>
-
-            <Text style={[styles.pie,{color: theme.text}]}>Registra • Organiza • Encuentra</Text>
-
+        <View style={{ flex: 1, backgroundColor: theme.background }}>
+            <ListaArticle
+                ListHeaderComponent={
+                    <View style={{ paddingHorizontal: 24 }}>
+                        <Text style={[styles.title, {color: theme.text}]}>Bienvenido a Caja Nagra</Text>
+                        <Text style={[styles.subtitle, {color: theme.text}]}>Organiza tus objetos...</Text>
+                        <View style={[styles.card, {backgroundColor: theme.card}]}>
+                            <Text style={[styles.cardtitle, {color: theme.text}]}>🔎 ¿Buscas algo?</Text>
+                            <Text style={[styles.cardtext, {color: theme.text}]}>Encuentra rapidamente...</Text>
+                            <CustomButton title='Buscar objeto' onPress={()=>console.log(1)} variant='secondary'/>
+                        </View>
+                        <View style={[styles.infocard, {backgroundColor: theme.card}]}>
+                            <Text style={[styles.infotitle, {color: theme.text}]}>📦 Organiza tus pertenencias</Text>
+                        </View>
+                    </View>
+                }
+                ListFooterComponent={
+                    <Text style={[styles.pie, {color: theme.text}]}>Registra • Organiza • Encuentra</Text>
+                }
+            />
         </View>
-
     );
 }
 

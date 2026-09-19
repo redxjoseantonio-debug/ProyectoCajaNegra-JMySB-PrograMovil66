@@ -6,6 +6,7 @@ import { navigationRef } from './src/navigation/NavigatorService';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { LanguageProviver } from './src/contexts/LanguageContext';
 import { AuthProvider } from './src/contexts/AuthContext';
+import { ArticleesProvider } from './src/contexts/ArticleContext';
 
 export default function App() {
     return (
@@ -13,9 +14,11 @@ export default function App() {
             <AuthProvider>
                 <ThemeProvider>
                     <LanguageProviver>
-                        <NavigationContainer ref={navigationRef}>
-                            <StackNavigator />
-                        </NavigationContainer>
+                        <ArticleesProvider>
+                            <NavigationContainer ref={navigationRef}>
+                                <StackNavigator />
+                            </NavigationContainer>
+                        </ArticleesProvider>
                     </LanguageProviver>
                 </ThemeProvider>
             </AuthProvider>
