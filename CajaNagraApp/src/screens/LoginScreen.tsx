@@ -6,6 +6,7 @@ import CustomButton from '../components/CustomButton';
 import CustomIput from '../components/CustomIput';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useLenguage } from "../contexts/LanguageContext";
 
 type RootStackParamList = {
     Login: undefined;
@@ -21,12 +22,15 @@ export default function LoginScreen({ navigation }: Props) {
 
     const { theme } = useTheme();
     const { login } = useAuth();
+    const { messag } = useLenguage();
 
     const emailValid = email.includes('@') && email.includes('.');
     const passwordValid = password.length >= 6;
 
     const handleLogin = () => {
       const allowed = login(email);
+      
+      
 
       if (allowed){
       navigation.navigate('Tabs');
@@ -38,14 +42,14 @@ export default function LoginScreen({ navigation }: Props) {
     return (
         <View style={[styles.container, {backgroundColor: theme.background}]}>
             <Image source={require('../../assets/Logo_caja_negra.jpg')} style={styles.logo} />
-            <Text style={[styles.title,{color: theme.text}]}>Caja Negra</Text>
-            <Text style={[styles.subtitle,{color: theme.text}]}>Organiza tus objetos de forma sencilla</Text>
+            <Text style={[styles.title,{color: theme.text}]}>{messag('nameApp')}</Text>
+            <Text style={[styles.subtitle,{color: theme.text}]}>{messag('welcomLogin')}</Text>
             <View style={styles.form}>
-            <Text style={[styles.label,{color: theme.text}]}>Correo electrónico</Text>
-            <CustomIput placeholder="Correo@ejemplo.com" value={email} onChangeText={setEmail} type='email'/>
-            <Text style={[styles.label,{color: theme.text}]}>Contraseña</Text>
-            <CustomIput placeholder="Minimo 6 caracteres" value={password} onChangeText={setPassword} type='password'/>
-            <CustomButton title="Iniciar sesión" onPress={handleLogin} variant='primary'/>
+            <Text style={[styles.label,{color: theme.text}]}>{messag('nameEmail')}</Text>
+            <CustomIput placeholder={messag('typeEmail')} value={email} onChangeText={setEmail} type='email'/>
+            <Text style={[styles.label,{color: theme.text}]}>{messag('namePass')}</Text>
+            <CustomIput placeholder={messag('typePassword')} value={password} onChangeText={setPassword} type='password'/>
+            <CustomButton title={messag('signIn')} onPress={handleLogin} variant='primary'/>
             </View>
         </View>
     );

@@ -4,15 +4,19 @@ import { translation } from "../utils/translations/translation";
 
 type Lenguage = "es" | "en";
 
+type TranslationKeys = keyof typeof translation["es"];
+
 type LenguageContextType = {
     language: Lenguage;
     changeLenguage: (lgn: Lenguage)=>void;
     clearLanguage: ()=>{};
+    messag: (key: TranslationKeys) => string;
 }
 
 const i18n = new I18n(translation);
 
 i18n.defaultLocale = "es";
+i18n.locale = "es";
 i18n.enableFallback = true;
 
 const LanguageContext = createContext<LenguageContextType | null>(null);
@@ -26,11 +30,13 @@ export const LanguageProviver = ({children}: {children: React.ReactNode})=>{
         i18n.locale = lng;
     }
 
+    const messag = (key: TranslationKeys) => i18n.t(key)
+
     const clearLanguage = ()=>{
         return "";
     }
     return(
-        <LanguageContext.Provider value={{language, changeLenguage, clearLanguage}}>
+        <LanguageContext.Provider value={{language, changeLenguage, clearLanguage, messag}}>
             {children}
         </LanguageContext.Provider>
     );

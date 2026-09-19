@@ -10,6 +10,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/StackNavigator';
 import { navigationRef } from '../navigation/NavigatorService';
 import { useAuth } from '../contexts/AuthContext';
+import { useLenguage } from '../contexts/LanguageContext';
 
 type NestedProps = CompositeScreenProps<
     BottomTabScreenProps<TabsParamList, "Profile">,
@@ -20,6 +21,7 @@ export default function ProfileScreen({navigation, route}: NestedProps) {
 
     const {theme, isDark, toggleTheme } = useTheme();
     const { user } = useAuth();
+    const { language, changeLenguage } = useLenguage();
 
     const handlelogout = ()=>{
         if (navigationRef.isReady()){
@@ -66,6 +68,7 @@ export default function ProfileScreen({navigation, route}: NestedProps) {
                 </View>
             </View>
             <View style={styles.buttons}>
+            <CustomButton title='Cambiar Idioma' onPress={() => changeLenguage(language === "es" ? "en" : "es")} variant='secondary'/>
             <CustomButton title='Cerrar Sesion' onPress={handlelogout} variant='secondary'/>
         </View>
         </View>
