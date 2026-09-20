@@ -34,6 +34,8 @@ export default function ProfileScreen({navigation, route}: NestedProps) {
         }
     };
 
+    const isEnglish = language === "en";
+
     return (
         <View style={[styles.container, {backgroundColor: theme.background}]}>
             <Text style={[styles.title,{ color: theme.text}]}>Mi Perfil</Text>
@@ -51,11 +53,12 @@ export default function ProfileScreen({navigation, route}: NestedProps) {
             <View style={[styles.themeCard, { backgroundColor: theme.card}]}>
                 <Text style={[styles.sectionTitle, { color: theme.text}]}>Preferencias</Text>
                 
-                <View style={[styles.division,{backgroundColor: isDark ? '#333333' : '#E1E1E1'}]}/>
+                <View style={[styles.division,
+                    {backgroundColor: isDark ? '#333333' : '#E1E1E1'}]}/>
                 <View style={styles.option}>
                     <View style={styles.optionInfo}>
-                        <View style={[styles.optionIconContainer,{backgroundColor: isDark ? '#333333' : '#F0F1F3'}]}>
-                        <Text style={styles.optionIcon}>{isDark? '🌙' : '☀️'}</Text>
+                        <View style={styles.iconContainer}>
+                        <Text style={styles.preferenceIcon}>{isDark? '🌙' : '☀️'}</Text>
                     </View>
                     <View style={styles.themeTextContainer}>
                     <Text style={[styles.themeTitle, {color: theme.text}]}> Modo Oscuro </Text>
@@ -66,9 +69,20 @@ export default function ProfileScreen({navigation, route}: NestedProps) {
                     trackColor={{false: '#D1D5DB', true: '#555555',}}
                     thumbColor={isDark ? '#FFFFFF' : '#FFFFFF'}/>
                 </View>
+                <View style={[styles.division,
+                    {backgroundColor: isDark ? '#333333' : '#E5E5E5'}]}/>
+                    <View style={styles.option}>
+                <View style={styles.iconContainer}>
+                    <Text style={styles.flagIcon}>{isEnglish ? '🇺🇸' : '🇪🇸'}</Text>
+                </View>
+                <View style={styles.preferenceInfo}>
+                    <Text style={[styles.preferenceTitle, {color: theme.text}]}>Idioma</Text>
+                    <Text style={[styles.themeDescription, {color: theme.text}]}>{isEnglish ? 'English' : 'Español'} </Text>
+                </View>
+                <Switch value={isEnglish} onValueChange={(value)=>changeLenguage(value ? "en" : "es")} trackColor={{false: '#D1D5DB', true: '#555555',}} thumbColor="#FFFFFF"/>
+                </View>
             </View>
             <View style={styles.buttons}>
-            <CustomButton title='Cambiar Idioma' onPress={() => changeLenguage(language === "es" ? "en" : "es")} variant='secondary'/>
             <CustomButton title='Cerrar Sesion' onPress={handlelogout} variant='secondary'/>
         </View>
         </View>
@@ -80,6 +94,13 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 24,
         paddingTop: 55,
+    },
+    iconContainer:{
+        width: 46,
+        height: 46,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 13,
     },
     title: {
         fontSize: 30,
@@ -126,10 +147,20 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     optionInfo: {
-        fontSize: 24,
-        marginRight: 14,
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
     },
-    optionIcon: {
+    preferenceIcon: {
+        fontSize: 19,
+    },
+    flagIcon:{
+        fontSize: 22,
+    },
+    preferenceInfo:{
+        flex: 1,
+    },
+    preferenceTitle:{
         fontSize: 16,
         fontWeight: '600',
         marginBottom: 3,
@@ -139,15 +170,6 @@ const styles = StyleSheet.create({
         height: 1,
         marginTop: 14,
         marginBottom: 16,
-    },
-
-    optionIconContainer:{
-        width: 46,
-        height: 46,
-        borderRadius: 14,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 13,
     },
     themeTitle: {
         fontSize: 18,
