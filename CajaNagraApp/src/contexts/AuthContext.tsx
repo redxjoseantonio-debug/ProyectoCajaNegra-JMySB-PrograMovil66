@@ -1,8 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { createContext, useState } from "react";
 import { supabase } from "../lib/supabase";
+import { Session } from "@supabase/supabase-js";
 
 type User = {
+    id: string;
     email: string;
     authToken?: string;
     sessionToken?: string;
@@ -11,6 +13,7 @@ type User = {
 
 type AuthContextType = {
     user: User | null;
+    loading: boolean;
     register: (email: string, pwd: string)=> Promise<void>,
     login: (email: string, pwd: string)=> Promise<void>;
     logout:()=> Promise<void>;
@@ -19,7 +22,21 @@ type AuthContextType = {
 const AuthContext = createContext <AuthContextType | null>(null);
 
 export const AuthProvider =({children}:{children: React.ReactNode})=>{
-    const [user, setUser] = useState<User>(null);
+    const [session, setSession] = useState<Session | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data }) => {
+            setSession(data.session);
+            setLoading(false);
+        });
+        const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
+        return () => sub.subscription.unsubscribe();
+    }, []);
+
+    const user: User = session?.user
+        ? { id: session.user.id, email: session.user.email ?? "" }
+        : null;
 
     const register = async(email: string, pwd: string)=>{
         const { data, error } = await supabase.auth.signUp({email, password: pwd})
@@ -29,7 +46,6 @@ export const AuthProvider =({children}:{children: React.ReactNode})=>{
     const login = async(email: string, pwd: string)=>{
         const { data, error } = await supabase.auth.signInWithPassword({email, password: pwd})
         if (error) throw error;
-        setUser({email: data.user?.email ?? email});
     }
     
     const logout = async()=>{
@@ -38,7 +54,7 @@ export const AuthProvider =({children}:{children: React.ReactNode})=>{
     }
 
     return(
-        <AuthContext.Provider value={{user, register, login, logout}}>
+        <AuthContext.Provider value={{user, loading, register, login, logout}}>
             {children}
         </AuthContext.Provider>
     );

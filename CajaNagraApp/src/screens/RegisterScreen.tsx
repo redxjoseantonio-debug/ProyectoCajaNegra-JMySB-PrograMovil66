@@ -7,12 +7,9 @@ import CustomIput from '../components/CustomIput';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useLenguage } from "../contexts/LanguageContext";
+import { RootStackParamList } from '../navigation/StackNavigator';
 
-type RootStackParamList = {
-    Login: undefined;
-    Tabs: undefined;
-    Register: undefined;
-};
+
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Register' >;
 
@@ -31,7 +28,7 @@ export default function RegisterScreen({ navigation }: Props) {
     const handleRegistrer = async () => {
         try {
            await register(email, password);
-           navigation.navigate("Login");
+           //navigation.navigate("Login");
         } catch (error:any) {
             console.log("error al registrarse:",error.message);
         }

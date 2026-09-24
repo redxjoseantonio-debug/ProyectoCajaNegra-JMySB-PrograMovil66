@@ -7,12 +7,9 @@ import CustomIput from '../components/CustomIput';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useLenguage } from "../contexts/LanguageContext";
+import { RootStackParamList } from '../navigation/StackNavigator';
 
-type RootStackParamList = {
-    Login: undefined;
-    Tabs: undefined;
-    Register: undefined;
-};
+
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
@@ -35,7 +32,7 @@ export default function LoginScreen({ navigation }: Props) {
     const handleLogin = async () => {
         try {
             await login (email, password);
-            navigation.navigate("Tabs");
+            //navigation.navigate("Tabs");
         } catch (error:any) {
             console.log("usuario no tiene acceso")
         }

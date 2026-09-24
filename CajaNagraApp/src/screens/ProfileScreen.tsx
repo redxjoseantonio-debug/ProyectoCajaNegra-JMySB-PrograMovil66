@@ -20,19 +20,10 @@ type NestedProps = CompositeScreenProps<
 export default function ProfileScreen({navigation, route}: NestedProps) {
 
     const {theme, isDark, toggleTheme } = useTheme();
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const { language, changeLenguage } = useLenguage();
 
-    const handlelogout = ()=>{
-        if (navigationRef.isReady()){
-            navigationRef.reset({
-                routes: [
-                    {name: 'Login'}
-                ],
-                index: 0,
-            })
-        }
-    };
+    const handlelogout = () => logout();
 
     const isEnglish = language === "en";
 
