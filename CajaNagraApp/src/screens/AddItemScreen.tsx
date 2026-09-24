@@ -20,16 +20,14 @@ export default function AddItemScreen() {
 
     const {addarticle} = useArticlees();
 
-    const handleAdd = () => {
-        addarticle({
-            nombre: name,
-            ubicacion: location,
-            descripcion: description,
-            urlImage: ''
-        });
-        setName('');
-        setDescription('');
-        setLocation('');
+    const handleAdd = async () => {
+        if (!nameValid || !locationValid) return;
+        try {
+            await addarticle({ nombre: name, ubicacion: location, descripcion: description, urlImage: '' });
+            setName(''); setDescription(''); setLocation('');
+        } catch (e: any) {
+            console.log("usuario no tiene acceso");
+        }
     };
 
 

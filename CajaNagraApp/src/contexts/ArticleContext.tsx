@@ -1,47 +1,74 @@
-import { createContext, useContext, useState, useRef } from "react";
+import { createContext, useContext, useState, useRef, useCallback, useEffect } from "react";
+import { supabase } from "../lib/supabase";
+import { useAuth } from "./AuthContext";
 
-export type Article = {
-    id: number;
-    nombre: string;
-    ubicacion: string;
-    descripcion: string;
-    urlImage?: string;
-}
+export type Article = { id: number; nombre: string; ubicacion: string; descripcion: string; urlImage?: string };
+
+
+const fromRow = (r: any): Article => ({
+  id: r.id,
+  nombre: r.nombre,
+  ubicacion: r.ubicacion,
+  descripcion: r.descripcion ?? "",
+  urlImage: r.url_image ?? undefined,
+});
 
 type articleesContextType = {
     articlees: Article[];
-    addarticle: (Article: Omit<Article, "id">) => void;
-    removearticle: (id: number) => void;
-    updatearticle: (id: number, data: Partial<Article>) => void;
+    loading: boolean;
+    addarticle: (a: Omit<Article, "id">) => Promise<void>;
+    removearticle: (id: number) => Promise<void>;
+    updatearticle: (id: number, data: Partial<Article>) => Promise<void>;
+    refresh: () => Promise<void>;
 }
 
 const articleesContext = createContext<articleesContextType | null>(null);
 
 export const ArticleesProvider = ({ children }: { children: React.ReactNode }) => {
-    const [articlees, setarticlees] = useState<Article[]>([]);
-    const nextId = useRef(1); // contador auto-incremental
+  const { user } = useAuth();
+  const [articlees, setarticlees] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(false);
 
-    const addarticle = (Article: Omit<Article, "id">) => {
-        const nuevo: Article = { id: nextId.current, ...Article };
-        nextId.current += 1;
-        setarticlees((prev) => [...prev, nuevo]);
-    };
+  const refresh = useCallback(async () => {
+    if (!user) { setarticlees([]); return; }   // cerró sesión: limpia la lista
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("articles").select("*").order("created_at", { ascending: false });
+    setLoading(false);
+    if (error) { console.log(error.message); return; }
+    setarticlees(data.map(fromRow));
+  }, [user?.id]);
 
-    const removearticle = (id: number) => {
-        setarticlees((prev) => prev.filter((l) => l.id !== id));
-    };
+  useEffect(() => { refresh(); }, [refresh]);
 
-    const updatearticle = (id: number, data: Partial<Article>) => {
-        setarticlees((prev) =>
-            prev.map((l) => (l.id === id ? { ...l, ...data } : l))
-        );
-    };
+  const addarticle = async (a: Omit<Article, "id">) => {
+    const { data, error } = await supabase
+      .from("articles")
+      .insert({ nombre: a.nombre, ubicacion: a.ubicacion, descripcion: a.descripcion, url_image: a.urlImage ?? null })
+      .select().single();
+    if (error) throw error;
+    setarticlees((prev) => [fromRow(data), ...prev]);
+  };
 
-    return (
-        <articleesContext.Provider value={{ articlees, addarticle, removearticle, updatearticle }}>
-            {children}
-        </articleesContext.Provider>
-    );
+  const removearticle = async (id: number) => {
+    const { error } = await supabase.from("articles").delete().eq("id", id);
+    if (error) throw error;
+    setarticlees((prev) => prev.filter((x) => x.id !== id));
+  };
+
+  const updatearticle = async (id: number, d: Partial<Article>) => {
+    const { error } = await supabase.from("articles")
+      .update({ nombre: d.nombre, ubicacion: d.ubicacion, descripcion: d.descripcion, url_image: d.urlImage })
+      .eq("id", id);
+    if (error) throw error;
+    setarticlees((prev) => prev.map((x) => (x.id === id ? { ...x, ...d } : x)));
+  };
+
+  return (
+    <articleesContext.Provider value={{ articlees, loading, addarticle, removearticle, updatearticle, refresh }}>
+      {children}
+    </articleesContext.Provider>
+  );
 };
 
 export const useArticlees = () => {
