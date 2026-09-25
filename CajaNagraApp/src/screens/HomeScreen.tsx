@@ -16,13 +16,14 @@ BottomTabScreenProps<TabsParamList, 'Home'>,
 NativeStackScreenProps<RootStackParamList>
 >;
 
-export default function HomeScreen({navigation, route}: NestedFeedProps) {
+export default function HomeScreen({navigation}: NestedFeedProps) {
 
     const { theme } = useTheme();
 
     return (
         <View style={{ flex: 1, backgroundColor: theme.background }}>
             <ListaArticle
+                onEdit={(article) => navigation.navigate('AddItem', { article })}
                 ListHeaderComponent={
                     <View style={{ paddingHorizontal: 24 }}>
                         <Text style={[styles.title, {color: theme.text}]}>Bienvenido a Caja Nagra</Text>
@@ -39,6 +40,13 @@ export default function HomeScreen({navigation, route}: NestedFeedProps) {
                 }
                 ListFooterComponent={
                     <Text style={[styles.pie, {color: theme.text}]}>Registra • Organiza • Encuentra</Text>
+                }
+                ListEmptyoComponent={
+                    <View style={styles.emptyContainer}>
+                        <Text style={styles.emptyIcon}>📭</Text>
+                        <Text style={[styles.emptyTitle, { color: theme.text }]}>Aún no tienes artículos</Text>
+                        <Text style={[styles.emptyText, { color: theme.text }]}>Agrega tu primer objeto desde la pestaña "+" </Text>
+                    </View>
                 }
             />
         </View>
@@ -103,5 +111,26 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: '600',
         textAlign: 'center',
+    },
+    emptyContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 60,
+    },
+    emptyIcon: { 
+        fontSize: 50, 
+        marginBottom: 12 
+    },
+    emptyTitle: { 
+        fontSize: 17, 
+        fontWeight: '700', 
+        marginBottom: 6 
+    },
+    emptyText: { 
+        fontSize: 14, 
+        opacity: 0.65, 
+        textAlign: 'center', 
+        paddingHorizontal: 30 
     },
 });

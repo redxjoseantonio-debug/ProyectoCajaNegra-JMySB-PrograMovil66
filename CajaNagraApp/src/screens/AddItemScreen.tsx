@@ -1,32 +1,72 @@
-import React, { useState } from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, { useCallback, useState } from 'react';
+import {View, Text, StyleSheet, Alert, TouchableOpacity, Image} from 'react-native';
 import CustomIput from '../components/CustomIput';
 import { useTheme } from '../contexts/ThemeContext';
 import { useArticlees } from '../contexts/ArticleContext';
 import CustomButton from '../components/CustomButton';
+import { useAuth } from '../contexts/AuthContext';
+import { pickAndUploadImage } from '../utils/image/uploadImage';
+import { RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { TabsParamList } from '../navigation/TabsNavigator';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 export default function AddItemScreen() {
+    const route = useRoute<RouteProp<TabsParamList, 'AddItem'>>();
+    const navigation = useNavigation<BottomTabNavigationProp<TabsParamList>>();
+    const editing = route.params?.article;
+
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
-    const [urlImage, setUrlImage] = useState('');
+    const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+    const [uploading, setUploading] = useState(false);
+    
+    const {theme} = useTheme();
+    const { user } = useAuth();
+    const {addarticle, updatearticle } = useArticlees();
+
+    useFocusEffect(
+        useCallback(() => {
+            setName(editing?.nombre ?? '');
+            setLocation(editing?.ubicacion ?? '');
+            setDescription(editing?.descripcion ?? '');
+            setImageUrl(editing?.urlImage);
+        }, [editing])
+    );
 
     const nameValid = name.trim().length > 0;
     const locationValid = location.trim().length > 0;
 
-    const [submitted, setSubmitted] = useState(false);
+    const handlePickImage = async () => {
+        if (!user) return;
+        try {
+            setUploading(true);
+            const url = await pickAndUploadImage(user.id);
+            if (url) setImageUrl(url);
+        } catch (e: any) {
+            Alert.alert('Error', e.message);
+        } finally {
+            setUploading(false);
+        }
+    };
 
-    const {theme} = useTheme();
-
-    const {addarticle} = useArticlees();
+    const resetForm = () => {
+        setName(''); setDescription(''); setLocation(''); setImageUrl(undefined);
+    };
 
     const handleAdd = async () => {
         if (!nameValid || !locationValid) return;
         try {
-            await addarticle({ nombre: name, ubicacion: location, descripcion: description, urlImage: '' });
-            setName(''); setDescription(''); setLocation('');
+            if (editing) {
+                await updatearticle(editing.id, { nombre: name, ubicacion: location, descripcion: description, urlImage: imageUrl });
+            } else {
+                await addarticle({ nombre: name, ubicacion: location, descripcion: description, urlImage: imageUrl });
+            }
+            resetForm();
+            navigation.setParams({ article: undefined }); // limpia el modo edición
+            navigation.navigate('Home');
         } catch (e: any) {
-            console.log("usuario no tiene acceso");
+            Alert.alert('Error', e.message);
         }
     };
 
@@ -48,9 +88,17 @@ export default function AddItemScreen() {
 
                 <CustomIput placeholder='Ingresa Descripcion' value={description} onChangeText={setDescription}/>
 
-                
+                <TouchableOpacity onPress={handlePickImage} disabled={uploading}>
+                    {imageUrl ? (
+                        <Image source={{ uri: imageUrl }} style={{ width: 90, height: 90, borderRadius: 12, marginBottom: 10 }} />
+                    ) : (
+                        <Text style={{ color: theme.text, marginBottom: 10 }}>
+                        {uploading ? 'Subiendo...' : '📷 Elegir imagen'}
+                        </Text>
+                    )}
+                </TouchableOpacity>
 
-                <CustomButton title='Agregar articulo' onPress={handleAdd} /> 
+                <CustomButton title={editing ? 'Guardar cambios' : 'Agregar articulo'} onPress={handleAdd} /> 
 
             </View>
         </View>

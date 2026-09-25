@@ -7,11 +7,12 @@ import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
 import AddItemScreen from '../screens/AddItemScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import { Article } from '../contexts/ArticleContext';
 
 export type TabsParamList={
     Home: undefined,
     Profile: undefined,
-    AddItem: undefined,
+    AddItem: { article?: Article }| undefined,
 };
 
 const Tab = createBottomTabNavigator<TabsParamList>();

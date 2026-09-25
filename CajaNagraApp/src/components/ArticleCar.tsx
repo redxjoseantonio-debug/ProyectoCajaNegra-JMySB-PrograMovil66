@@ -1,26 +1,49 @@
-import { View, Text, Image, StyleSheet } from "react-native";
-import { Article } from "../contexts/ArticleContext";
+import { View, Text, Image, StyleSheet, Alert, TouchableOpacity } from "react-native";
+import { Article, useArticlees } from "../contexts/ArticleContext";
 import { useTheme } from "../contexts/ThemeContext";
+import { Ionicons } from "@expo/vector-icons";
 
 type LugarCardProps = {
     articlet: Article;
+    onEdit?: (article: Article) => void;
 }
 
-export const ArticleCard = ({ articlet }: LugarCardProps) => {
-        const {theme} = useTheme();
+export const ArticleCard = ({ articlet, onEdit }: LugarCardProps) => {
+        const { theme } = useTheme();
+        const { removearticle } = useArticlees();
+
+        const handleDelete = () => {
+            Alert.alert("Eliminar artículo",`¿Seguro que quieres eliminar "${articlet.nombre}"?`,
+                [
+                    { text: "Cancelar", style: "cancel" },
+                    {
+                        text: "Eliminar", style: "destructive", onPress: async () => {
+                            try { await removearticle(articlet.id); }
+                            catch (e: any) { Alert.alert("Error", e.message); }
+                        }
+                    },
+                ]
+            ); 
+        };
 
     return (        
-        <View style={[styles.card, {backgroundColor: theme.card}]}>
-            {/* Columna izquierda: textos */}
-            <View style={[styles.infoContainer, {backgroundColor: theme.card}]}>
-                <Text style={[styles.nombre,{color: theme.text}]}>{articlet.nombre}</Text>
-                <Text style={[styles.ubicacion,{color: theme.text}]}>{articlet.ubicacion}</Text>
-                <Text style={[styles.descripcion,{color: theme.text}]} numberOfLines={3}>
+        <View style={[styles.card, { backgroundColor: theme.card }]}>
+            <View style={[styles.infoContainer, { backgroundColor: theme.card }]}>
+                <Text style={[styles.nombre, { color: theme.text }]}>{articlet.nombre}</Text>
+                <Text style={[styles.ubicacion, { color: theme.text }]}>{articlet.ubicacion}</Text>
+                <Text style={[styles.descripcion, { color: theme.text }]} numberOfLines={3}>
                     {articlet.descripcion}
                 </Text>
+                <View style={{ flexDirection: 'row', marginTop: 8, gap: 16 }}>
+                    <TouchableOpacity onPress={() => onEdit?.(articlet)}>
+                        <Ionicons name="pencil" size={20} color="#007AFF" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleDelete}>
+                        <Ionicons name="trash" size={20} color="#E53935" />
+                    </TouchableOpacity>
+                </View>
             </View>
 
-            {/* Lado derecho: imagen */}
             <Image
                 source={articlet.urlImage ? { uri: articlet.urlImage } : require("../../assets/ImagePlaceholder.png")}
                 style={styles.image}

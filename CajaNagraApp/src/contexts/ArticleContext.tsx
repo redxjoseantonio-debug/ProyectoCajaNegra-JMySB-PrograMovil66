@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "./AuthContext";
+import { deleteImageFromUrl } from "../utils/image/uploadImage";
 
 export type Article = { id: number; nombre: string; ubicacion: string; descripcion: string; urlImage?: string };
 
@@ -51,9 +52,11 @@ export const ArticleesProvider = ({ children }: { children: React.ReactNode }) =
   };
 
   const removearticle = async (id: number) => {
+    const article = articlees.find((a) => a.id === id);
     const { error } = await supabase.from("articles").delete().eq("id", id);
     if (error) throw error;
     setarticlees((prev) => prev.filter((x) => x.id !== id));
+    await deleteImageFromUrl(article?.urlImage);
   };
 
   const updatearticle = async (id: number, d: Partial<Article>) => {
