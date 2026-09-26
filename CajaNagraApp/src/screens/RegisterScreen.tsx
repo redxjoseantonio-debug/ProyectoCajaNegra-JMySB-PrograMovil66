@@ -38,7 +38,7 @@ export default function RegisterScreen({ navigation }: Props) {
         <View style={[styles.container, {backgroundColor: theme.background}]}>
             <Image source={require('../../assets/Logo_caja_negra.jpg')} style={styles.logo} />
             <Text style={[styles.title,{color: theme.text}]}>{messag('nameApp')}</Text>
-            <Text style={[styles.subtitle,{color: theme.text}]}>Registrate</Text>
+            <Text style={[styles.subtitle,{color: theme.text}]}>{messag('welRegister')}</Text>
             <View style={styles.form}>
             <Text style={[styles.label,{color: theme.text}]}>{messag('nameEmail')}</Text>
             <CustomIput placeholder={messag('typeEmail')} value={email} onChangeText={setEmail} type='email'/>

@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet, Alert, TouchableOpacity } from "react-na
 import { Article, useArticlees } from "../contexts/ArticleContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
+import { useLenguage } from "../contexts/LanguageContext";
 
 type LugarCardProps = {
     articlet: Article;
@@ -11,13 +12,14 @@ type LugarCardProps = {
 export const ArticleCard = ({ articlet, onEdit }: LugarCardProps) => {
         const { theme } = useTheme();
         const { removearticle } = useArticlees();
+        const { messag } = useLenguage();
 
         const handleDelete = () => {
-            Alert.alert("Eliminar artículo",`¿Seguro que quieres eliminar "${articlet.nombre}"?`,
+            Alert.alert(messag('artcarTitle'),`¿${messag('artcarask')} "${articlet.nombre}"?`,
                 [
-                    { text: "Cancelar", style: "cancel" },
+                    { text: messag('artcarcancel'), style: "cancel" },
                     {
-                        text: "Eliminar", style: "destructive", onPress: async () => {
+                        text: messag('artcarDelet'), style: "destructive", onPress: async () => {
                             try { await removearticle(articlet.id); }
                             catch (e: any) { Alert.alert("Error", e.message); }
                         }

@@ -49,7 +49,7 @@ export default function LoginScreen({ navigation }: Props) {
             <Text style={[styles.label,{color: theme.text}]}>{messag('namePass')}</Text>
             <CustomIput placeholder={messag('typePassword')} value={password} onChangeText={setPassword} type='password'/>
             <CustomButton title={messag('signIn')} onPress={handleLogin} variant='primary'/>
-            <CustomButton title='Ir a register' onPress={handleRegister} variant='primary' />
+            <CustomButton title={messag('signUp')} onPress={handleRegister} variant='primary' />
             </View>
         </View>
     );

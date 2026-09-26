@@ -9,6 +9,7 @@ import { pickAndUploadImage } from '../utils/image/uploadImage';
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { TabsParamList } from '../navigation/TabsNavigator';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { useLenguage } from '../contexts/LanguageContext';
 
 export default function AddItemScreen() {
     const route = useRoute<RouteProp<TabsParamList, 'AddItem'>>();
@@ -23,6 +24,7 @@ export default function AddItemScreen() {
     
     const {theme} = useTheme();
     const { user } = useAuth();
+    const { messag } = useLenguage();
     const {addarticle, updatearticle } = useArticlees();
 
     useFocusEffect(
@@ -73,32 +75,32 @@ export default function AddItemScreen() {
 
     return (
         <View style={[styles.container,{ backgroundColor: theme.background}]}>
-            <Text style={[styles.title,{ color: theme.text}]}>Agregar un objeto</Text>
-            <Text style={[styles.subtitle, {color: theme.text}]}>Registra un objeto para saber donde lo guardaste.</Text>
+            <Text style={[styles.title,{ color: theme.text}]}>{messag('titleAdd')}</Text>
+            <Text style={[styles.subtitle, {color: theme.text}]}>{messag('messTitleadd')}</Text>
 
             <View style={[styles.card, { backgroundColor: theme.card}]}>
-                <Text style={[styles.cardtitle, { color: theme.text}]}>📦 Agrega un objeto</Text>
-                <Text style={[styles.cardtext,{color: theme.text}]}>Aqui podras agregar la informacion de tus pertenencias y mantenerlas organizadas.</Text>
+                <Text style={[styles.cardtitle, { color: theme.text}]}>{messag('titleCarAdd')}</Text>
+                <Text style={[styles.cardtext,{color: theme.text}]}>{messag('messCarAdd')}</Text>
             </View>
 
             <View style={[styles.card, { backgroundColor: theme.card}]}>
-                <CustomIput placeholder='Ingresa el nombre' value={name} onChangeText={setName}/>
+                <CustomIput placeholder={messag('placeHname')} value={name} onChangeText={setName}/>
 
-                <CustomIput placeholder='Ingresa el lugar' value={location} onChangeText={setLocation}/>
+                <CustomIput placeholder={messag('placeHLugar')} value={location} onChangeText={setLocation}/>
 
-                <CustomIput placeholder='Ingresa Descripcion' value={description} onChangeText={setDescription}/>
+                <CustomIput placeholder={messag('placeHdesrip')} value={description} onChangeText={setDescription}/>
 
                 <TouchableOpacity onPress={handlePickImage} disabled={uploading}>
                     {imageUrl ? (
                         <Image source={{ uri: imageUrl }} style={{ width: 90, height: 90, borderRadius: 12, marginBottom: 10 }} />
                     ) : (
                         <Text style={{ color: theme.text, marginBottom: 10 }}>
-                        {uploading ? 'Subiendo...' : '📷 Elegir imagen'}
+                        {uploading ? messag('imageLoadAdd') : messag('placeHimage')}
                         </Text>
                     )}
                 </TouchableOpacity>
 
-                <CustomButton title={editing ? 'Guardar cambios' : 'Agregar articulo'} onPress={handleAdd} /> 
+                <CustomButton title={editing ? messag('titleButtadd1') : messag('titleButtadd2')} onPress={handleAdd} /> 
 
             </View>
         </View>

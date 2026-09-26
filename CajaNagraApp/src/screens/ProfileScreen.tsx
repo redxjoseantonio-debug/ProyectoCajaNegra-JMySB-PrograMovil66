@@ -8,7 +8,6 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { TabsParamList } from '../navigation/TabsNavigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/StackNavigator';
-import { navigationRef } from '../navigation/NavigatorService';
 import { useAuth } from '../contexts/AuthContext';
 import { useLenguage } from '../contexts/LanguageContext';
 
@@ -21,7 +20,7 @@ export default function ProfileScreen({navigation, route}: NestedProps) {
 
     const {theme, isDark, toggleTheme } = useTheme();
     const { user, logout } = useAuth();
-    const { language, changeLenguage } = useLenguage();
+    const { language, changeLenguage, messag } = useLenguage();
 
     const handlelogout = () => logout();
 
@@ -29,20 +28,20 @@ export default function ProfileScreen({navigation, route}: NestedProps) {
 
     return (
         <View style={[styles.container, {backgroundColor: theme.background}]}>
-            <Text style={[styles.title,{ color: theme.text}]}>Mi Perfil</Text>
-            <Text style={[styles.subtitle,{ color: theme.text}]}>Administra la informacion de tu cuenta</Text>
+            <Text style={[styles.title,{ color: theme.text}]}>{messag('titleProfile')}</Text>
+            <Text style={[styles.subtitle,{ color: theme.text}]}>{messag('profilemmessTitle')}</Text>
             <View style={[styles.card,{ backgroundColor: theme.card}]}>
             <View style={styles.profileCircle}>
                 <Text style={styles.profileIcon}>👤</Text>
                 </View>
                 <View style={styles.profileInfo}>
-                <Text style={[styles.Name,{ color: theme.text}]}>Nombre de Usuario</Text>
-                <Text style={[styles.Email,{ color: theme.text}]}>{user? user?.email : 'No hay usuario'}</Text>  
+                <Text style={[styles.Name,{ color: theme.text}]}>{messag('profNameUser')}</Text>
+                <Text style={[styles.Email,{ color: theme.text}]}>{user? user?.email : messag('profnotUser')}</Text>  
                 </View>
             </View>
 
             <View style={[styles.themeCard, { backgroundColor: theme.card}]}>
-                <Text style={[styles.sectionTitle, { color: theme.text}]}>Preferencias</Text>
+                <Text style={[styles.sectionTitle, { color: theme.text}]}>{messag('profPrefe')}</Text>
                 
                 <View style={[styles.division,
                     {backgroundColor: isDark ? '#333333' : '#E1E1E1'}]}/>
@@ -52,8 +51,8 @@ export default function ProfileScreen({navigation, route}: NestedProps) {
                         <Text style={styles.preferenceIcon}>{isDark? '🌙' : '☀️'}</Text>
                     </View>
                     <View style={styles.themeTextContainer}>
-                    <Text style={[styles.themeTitle, {color: theme.text}]}> Modo Oscuro </Text>
-                    <Text style={[styles.themeDescription,{color: theme.text}]}>{isDark ? 'Tema oscuro activado' : 'Tema claro activado'}</Text>
+                    <Text style={[styles.themeTitle, {color: theme.text}]}> {messag('profTitleTheme')} </Text>
+                    <Text style={[styles.themeDescription,{color: theme.text}]}>{isDark ? messag('profThemeDark') : messag('profThemelieting')}</Text>
                     </View>
                     </View>
                     <Switch value={isDark} onValueChange={toggleTheme}
@@ -74,7 +73,7 @@ export default function ProfileScreen({navigation, route}: NestedProps) {
                 </View>
             </View>
             <View style={styles.buttons}>
-            <CustomButton title='Cerrar Sesion' onPress={handlelogout} variant='secondary'/>
+            <CustomButton title={messag('profButtTitle')} onPress={handlelogout} variant='secondary'/>
         </View>
         </View>
     );

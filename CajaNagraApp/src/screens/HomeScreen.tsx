@@ -11,6 +11,7 @@ import { ListaArticle } from '../components/ListaArticle';
 import { useArticlees } from '../contexts/ArticleContext';
 import CustomIput from '../components/CustomIput';
 import { Ionicons } from '@expo/vector-icons';
+import { useLenguage } from '../contexts/LanguageContext';
 
 type NestedFeedProps = CompositeScreenProps<
 BottomTabScreenProps<TabsParamList, 'Home'>,
@@ -20,6 +21,7 @@ NativeStackScreenProps<RootStackParamList>
 export default function HomeScreen({navigation}: NestedFeedProps) {
 
     const { theme } = useTheme();
+    const { messag } = useLenguage();
     const { articlees } = useArticlees();
     const [searching, setSearching] = useState(false);
     const [query, setQuery] = useState('');
@@ -46,17 +48,17 @@ export default function HomeScreen({navigation}: NestedFeedProps) {
                 onEdit={(article) => navigation.navigate('AddItem', { article })}
                 ListHeaderComponent={
                     <View style={{ paddingHorizontal: 24 }}>
-                        <Text style={[styles.title, {color: theme.text}]}>Bienvenido a Caja Nagra</Text>
-                        <Text style={[styles.subtitle, {color: theme.text}]}>Organiza tus objetos...</Text>
+                        <Text style={[styles.title, {color: theme.text}]}>{messag('welHome')}</Text>
+                        <Text style={[styles.subtitle, {color: theme.text}]}>{messag('messHome1')}</Text>
                         <View style={[styles.card, {backgroundColor: theme.card}]}>
-                            <Text style={[styles.cardtitle, {color: theme.text}]}>🔎 ¿Buscas algo?</Text>
+                            <Text style={[styles.cardtitle, {color: theme.text}]}>{messag('askHome')}</Text>
 
                             {searching ? (
                                 <>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                                         <View style={{ flex: 1 }}>
                                             <CustomIput
-                                                placeholder="Nombre, lugar o descripcion..."
+                                                placeholder={messag('askPlaeHome')}
                                                 value={query}
                                                 onChangeText={setQuery}
                                             />
@@ -67,38 +69,38 @@ export default function HomeScreen({navigation}: NestedFeedProps) {
                                     </View>
                                     {query.trim().length > 0 && (
                                         <Text style={[styles.cardtext, { color: theme.text }]}>
-                                            {filtered.length} resultado{filtered.length !== 1 ? 's' : ''}
+                                            {filtered.length} {messag('AskFinis')} {filtered.length !== 1 ? 's' : ''}
                                         </Text>
                                     )}
                                 </>
                             ) : (
                                 <>
-                                    <Text style={[styles.cardtext, {color: theme.text}]}>Encuentra rapidamente...</Text>
-                                    <CustomButton title='Buscar objeto' onPress={() => setSearching(true)} variant='secondary'/>
+                                    <Text style={[styles.cardtext, {color: theme.text}]}>{messag('messHome2')}</Text>
+                                    <CustomButton title={messag('titleButtHome')} onPress={() => setSearching(true)} variant='secondary'/>
                                 </>
                             )}
                         </View>
 
                         {!searching && (
                             <View style={[styles.infocard, {backgroundColor: theme.card}]}>
-                                <Text style={[styles.infotitle, {color: theme.text}]}>📦 Organiza tus pertenencias</Text>
+                                <Text style={[styles.infotitle, {color: theme.text}]}>{messag('organizemes')}</Text>
                             </View>
                         )}
                     </View>
                 }
                 ListFooterComponent={
-                    <Text style={[styles.pie, {color: theme.text}]}>Registra • Organiza • Encuentra</Text>
+                    <Text style={[styles.pie, {color: theme.text}]}>{messag('footerHome')}</Text>
                 }
                 ListEmptyoComponent={
                     <View style={styles.emptyContainer}>
                         <Text style={styles.emptyIcon}>{searching ? '🔍' : '📭'}</Text>
                         <Text style={[styles.emptyTitle, { color: theme.text }]}>
-                            {searching ? 'Sin resultados' : 'Aún no tienes artículos'}
+                            {searching ? messag('resultN') : messag('thereNHome')}
                         </Text>
                         <Text style={[styles.emptyText, { color: theme.text }]}>
                             {searching
-                                ? `No encontramos nada para "${query}"`
-                                : 'Agrega tu primer objeto desde la pestaña "+"'}
+                                ? `${messag('thereNHome2')} "${query}"`
+                                : messag('addmessHome')}
                         </Text>
                     </View>
                 }
