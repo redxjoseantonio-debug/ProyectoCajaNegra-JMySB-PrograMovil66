@@ -8,14 +8,16 @@ type Props = {
     ListFooterComponent?: React.ReactElement;
     ListEmptyoComponent?: React.ReactElement;
     onEdit?: (article: Article) => void;
+    data?: Article[];
 }
 
-export const ListaArticle = ({ ListHeaderComponent, ListFooterComponent, ListEmptyoComponent, onEdit }: Props) => {
+export const ListaArticle = ({ ListHeaderComponent, ListFooterComponent, ListEmptyoComponent, onEdit, data }: Props) => {
     const { articlees } = useArticlees();
+    const items = data ?? articlees;
 
     return (
         <FlatList
-            data={articlees}
+            data={items}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => <ArticleCard articlet={item} onEdit={onEdit} />}
             ListHeaderComponent={ListHeaderComponent}

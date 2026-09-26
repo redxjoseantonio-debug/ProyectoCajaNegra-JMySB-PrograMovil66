@@ -1,7 +1,6 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, { useMemo, useState } from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import CustomButton from '../components/CustomButton';
-import { navigationRef } from '../navigation/NavigatorService';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { TabsParamList } from '../navigation/TabsNavigator';
@@ -9,7 +8,9 @@ import { RootStackParamList } from '../navigation/StackNavigator';
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTheme } from '../contexts/ThemeContext';
 import { ListaArticle } from '../components/ListaArticle';
-import { ArticleCard } from '../components/ArticleCar';
+import { useArticlees } from '../contexts/ArticleContext';
+import CustomIput from '../components/CustomIput';
+import { Ionicons } from '@expo/vector-icons';
 
 type NestedFeedProps = CompositeScreenProps<
 BottomTabScreenProps<TabsParamList, 'Home'>,
@@ -19,10 +20,29 @@ NativeStackScreenProps<RootStackParamList>
 export default function HomeScreen({navigation}: NestedFeedProps) {
 
     const { theme } = useTheme();
+    const { articlees } = useArticlees();
+    const [searching, setSearching] = useState(false);
+    const [query, setQuery] = useState('');
 
+    const filtered = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        if (!q) return articlees;
+        return articlees.filter((a) =>
+            a.nombre.toLowerCase().includes(q) ||
+            a.ubicacion.toLowerCase().includes(q) ||
+            (a.descripcion ?? '').toLowerCase().includes(q)
+        );
+    }, [articlees, query]);
+
+    const closeSearch = () => {
+        setSearching(false);
+        setQuery('');
+    };
+   
     return (
         <View style={{ flex: 1, backgroundColor: theme.background }}>
             <ListaArticle
+                data={searching ? filtered : undefined}
                 onEdit={(article) => navigation.navigate('AddItem', { article })}
                 ListHeaderComponent={
                     <View style={{ paddingHorizontal: 24 }}>
@@ -30,12 +50,40 @@ export default function HomeScreen({navigation}: NestedFeedProps) {
                         <Text style={[styles.subtitle, {color: theme.text}]}>Organiza tus objetos...</Text>
                         <View style={[styles.card, {backgroundColor: theme.card}]}>
                             <Text style={[styles.cardtitle, {color: theme.text}]}>🔎 ¿Buscas algo?</Text>
-                            <Text style={[styles.cardtext, {color: theme.text}]}>Encuentra rapidamente...</Text>
-                            <CustomButton title='Buscar objeto' onPress={()=>console.log(1)} variant='secondary'/>
+
+                            {searching ? (
+                                <>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                                        <View style={{ flex: 1 }}>
+                                            <CustomIput
+                                                placeholder="Nombre, lugar o descripcion..."
+                                                value={query}
+                                                onChangeText={setQuery}
+                                            />
+                                        </View>
+                                        <TouchableOpacity onPress={closeSearch} style={{ marginBottom: 14 }}>
+                                            <Ionicons name="close-circle" size={26} color={theme.text} />
+                                        </TouchableOpacity>
+                                    </View>
+                                    {query.trim().length > 0 && (
+                                        <Text style={[styles.cardtext, { color: theme.text }]}>
+                                            {filtered.length} resultado{filtered.length !== 1 ? 's' : ''}
+                                        </Text>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <Text style={[styles.cardtext, {color: theme.text}]}>Encuentra rapidamente...</Text>
+                                    <CustomButton title='Buscar objeto' onPress={() => setSearching(true)} variant='secondary'/>
+                                </>
+                            )}
                         </View>
-                        <View style={[styles.infocard, {backgroundColor: theme.card}]}>
-                            <Text style={[styles.infotitle, {color: theme.text}]}>📦 Organiza tus pertenencias</Text>
-                        </View>
+
+                        {!searching && (
+                            <View style={[styles.infocard, {backgroundColor: theme.card}]}>
+                                <Text style={[styles.infotitle, {color: theme.text}]}>📦 Organiza tus pertenencias</Text>
+                            </View>
+                        )}
                     </View>
                 }
                 ListFooterComponent={
@@ -43,9 +91,15 @@ export default function HomeScreen({navigation}: NestedFeedProps) {
                 }
                 ListEmptyoComponent={
                     <View style={styles.emptyContainer}>
-                        <Text style={styles.emptyIcon}>📭</Text>
-                        <Text style={[styles.emptyTitle, { color: theme.text }]}>Aún no tienes artículos</Text>
-                        <Text style={[styles.emptyText, { color: theme.text }]}>Agrega tu primer objeto desde la pestaña "+" </Text>
+                        <Text style={styles.emptyIcon}>{searching ? '🔍' : '📭'}</Text>
+                        <Text style={[styles.emptyTitle, { color: theme.text }]}>
+                            {searching ? 'Sin resultados' : 'Aún no tienes artículos'}
+                        </Text>
+                        <Text style={[styles.emptyText, { color: theme.text }]}>
+                            {searching
+                                ? `No encontramos nada para "${query}"`
+                                : 'Agrega tu primer objeto desde la pestaña "+"'}
+                        </Text>
                     </View>
                 }
             />
