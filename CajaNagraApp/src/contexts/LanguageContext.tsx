@@ -26,7 +26,6 @@ export const LanguageProviver = ({children}: {children: React.ReactNode})=>{
     
     const changeLenguage = (lng: Lenguage)=>{
         setLanguage(lng);
-        //asignacion del idioma activo
         i18n.locale = lng;
     }
 
